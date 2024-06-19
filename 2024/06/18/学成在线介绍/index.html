@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mysql相关, Lycoris的个人博客">
+    <meta name="keywords" content="学成在线介绍, Lycoris的个人博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mysql相关 | Lycoris的个人博客</title>
+    <title>学成在线介绍 | Lycoris的个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mysql相关</h1>
+                    <h1 class="description center-align post-title">学成在线介绍</h1>
                 </div>
             </div>
         </div>
@@ -431,8 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                <span class="chip bg-color">数据库</span>
+                            <a href="/tags/%E9%BB%91%E9%A9%AC%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">黑马学习</span>
                             </a>
                         
                     </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2024-06-17
+                    2024-06-18
                 </div>
                 
 
@@ -473,19 +473,17 @@
             <div id="articleContent">
                 <span id="more"></span>
 
-<h5 id="1-Mybist分页插件的原理？"><a href="#1-Mybist分页插件的原理？" class="headerlink" title="1.Mybist分页插件的原理？"></a>1.Mybist分页插件的原理？</h5><p>​	首先分页参数放到ThreadLocal中。拦截执行的失去了，根据数据库类型添加对应的分页语句重写sql，例如:(select * from table where a)转换为(select count(*) from table where a)和(select * from table where a limit) 计算出了total总条数，pageNum当前第几页，pageSize每页大小和当前页的数据，是否为首页，是否为尾页。总页数等</p>
-<h5 id="2-树形表的标记字段是什么？如何查询MySQL树形表？"><a href="#2-树形表的标记字段是什么？如何查询MySQL树形表？" class="headerlink" title="2.树形表的标记字段是什么？如何查询MySQL树形表？"></a>2.树形表的标记字段是什么？如何查询MySQL树形表？</h5><p>树形表的标记字段是parentid即父节点的id</p>
-<p>查询一个树形表的方法</p>
-<p>1.当层级固定时可以用表的自连接进行查询</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">    one.id            one_id,</span><br><span class="line">    one.name          one_name,</span><br><span class="line">    one.label         one_plabel,</span><br><span class="line">    two.id            two_id,</span><br><span class="line">    two.name          two_name,</span><br><span class="line">    two.label         two_plabel,</span><br><span class="line"></span><br><span class="line">from course_category one</span><br><span class="line">         inner join course_category two on one.id = two.parentid</span><br><span class="line">where one.parentid = &#x27;1&#x27;</span><br><span class="line">	and one.is_show= &#x27;1&#x27;</span><br><span class="line">	and two.is_show= &#x27;1&#x27;</span><br><span class="line">order by one.orderby, two.orderby</span><br></pre></td></tr></table></figure>
-
-<p>2.如果想灵活查询每个层级可以使用mysql递归方法，使用 with recursive实现。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">with recursive t1 as (</span><br><span class="line">	select * from course_category p where id=#&#123;id&#125;</span><br><span class="line">	union all</span><br><span class="line">	select t.* from course_category t inner join t1 on ti.id = t.parentid</span><br><span class="line">)</span><br><span class="line">	select * from ti order by t1.id, t1.orderby</span><br></pre></td></tr></table></figure>
-
-<h5 id="3-Mybatis中的resultType和resultMap区别"><a href="#3-Mybatis中的resultType和resultMap区别" class="headerlink" title="3.Mybatis中的resultType和resultMap区别"></a>3.Mybatis中的resultType和resultMap区别</h5><p>resultType:指定映射类型，只要查询的字段名和类型的属性名匹配可以自动映射</p>
-<p>resultMap：自定义映射规则，当前查询的字段名和映射类型的属性不匹配时可以通过ResultMap自定义映射规则，也可以实现一对多，一对一映射。</p>
-<h5 id="4-和-的区别"><a href="#4-和-的区别" class="headerlink" title="4.#{}和${}的区别"></a>4.#{}和${}的区别</h5><p>#{}是标记一占位符，可以防止sql注入</p>
-<p>${}用于在动态sql中拼接字符串，可能导致sql注入</p>
+<p>项目介绍</p>
+<ul>
+<li><p>本项目包括了用户端、机构端、运营端。</p>
+</li>
+<li><p>核心模块包括：内容管理、媒资管理、课程搜索、订单支付、选课管理、认证授权等。</p>
+</li>
+<li><p>本项目采用前后端分离架构，后端采用SpringBoot、SpringCloud技术栈开发，数据库使用了MySQL，还使用的Redis、消息队列、分布式文件系统、Elasticsearch等中间件系统。</p>
+</li>
+<li><p>划分的微服务包括：内容管理服务、媒资管理服务、搜索服务、订单支付服务、 学习中心服务、系统管理服务、认证授权服务、网关服务、注册中心服务、配置中心服务等。</p>
+</li>
+</ul>
 
                 
             </div>
@@ -512,7 +510,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2024/06/17/mysql%E7%9B%B8%E5%85%B3/">http://example.com/2024/06/17/mysql%E7%9B%B8%E5%85%B3/</a>
+                    <a href="http://example.com/2024/06/18/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E4%BB%8B%E7%BB%8D/">http://example.com/2024/06/18/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E4%BB%8B%E7%BB%8D/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -550,8 +548,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                    <span class="chip bg-color">数据库</span>
+                                <a href="/tags/%E9%BB%91%E9%A9%AC%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">黑马学习</span>
                                 </a>
                             
                         </div>
@@ -725,13 +723,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2024/06/18/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E4%BB%8B%E7%BB%8D/">
+                <a href="/2024/06/19/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="学成在线介绍">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="异常处理">
                         
-                        <span class="card-title">学成在线介绍</span>
+                        <span class="card-title">异常处理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -742,7 +740,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2024-06-18
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-06-19
                         </span>
                         <span class="publish-author">
                             
@@ -755,8 +753,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%BB%91%E9%A9%AC%E5%AD%A6%E4%B9%A0/">
-                        <span class="chip bg-color">黑马学习</span>
+                    <a href="/tags/java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+                        <span class="chip bg-color">java异常处理</span>
                     </a>
                     
                 </div>
@@ -770,13 +768,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2024/06/13/redis/">
+                <a href="/2024/06/17/mysql%E7%9B%B8%E5%85%B3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="redis学习笔记">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="mysql相关">
                         
-                        <span class="card-title">redis学习笔记</span>
+                        <span class="card-title">mysql相关</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -787,7 +785,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-17
                             </span>
                         <span class="publish-author">
                             
@@ -800,8 +798,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
+                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                        <span class="chip bg-color">数据库</span>
                     </a>
                     
                 </div>

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mysql相关, Lycoris的个人博客">
+    <meta name="keywords" content="异常处理, Lycoris的个人博客">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mysql相关 | Lycoris的个人博客</title>
+    <title>异常处理 | Lycoris的个人博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mysql相关</h1>
+                    <h1 class="description center-align post-title">异常处理</h1>
                 </div>
             </div>
         </div>
@@ -431,8 +431,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                <span class="chip bg-color">数据库</span>
+                            <a href="/tags/java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+                                <span class="chip bg-color">java异常处理</span>
                             </a>
                         
                     </div>
@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2024-06-17
+                    2024-06-19
                 </div>
                 
 
@@ -473,19 +473,26 @@
             <div id="articleContent">
                 <span id="more"></span>
 
-<h5 id="1-Mybist分页插件的原理？"><a href="#1-Mybist分页插件的原理？" class="headerlink" title="1.Mybist分页插件的原理？"></a>1.Mybist分页插件的原理？</h5><p>​	首先分页参数放到ThreadLocal中。拦截执行的失去了，根据数据库类型添加对应的分页语句重写sql，例如:(select * from table where a)转换为(select count(*) from table where a)和(select * from table where a limit) 计算出了total总条数，pageNum当前第几页，pageSize每页大小和当前页的数据，是否为首页，是否为尾页。总页数等</p>
-<h5 id="2-树形表的标记字段是什么？如何查询MySQL树形表？"><a href="#2-树形表的标记字段是什么？如何查询MySQL树形表？" class="headerlink" title="2.树形表的标记字段是什么？如何查询MySQL树形表？"></a>2.树形表的标记字段是什么？如何查询MySQL树形表？</h5><p>树形表的标记字段是parentid即父节点的id</p>
-<p>查询一个树形表的方法</p>
-<p>1.当层级固定时可以用表的自连接进行查询</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">select</span><br><span class="line">    one.id            one_id,</span><br><span class="line">    one.name          one_name,</span><br><span class="line">    one.label         one_plabel,</span><br><span class="line">    two.id            two_id,</span><br><span class="line">    two.name          two_name,</span><br><span class="line">    two.label         two_plabel,</span><br><span class="line"></span><br><span class="line">from course_category one</span><br><span class="line">         inner join course_category two on one.id = two.parentid</span><br><span class="line">where one.parentid = &#x27;1&#x27;</span><br><span class="line">	and one.is_show= &#x27;1&#x27;</span><br><span class="line">	and two.is_show= &#x27;1&#x27;</span><br><span class="line">order by one.orderby, two.orderby</span><br></pre></td></tr></table></figure>
+<h5 id="1-系统如何处理异常？"><a href="#1-系统如何处理异常？" class="headerlink" title="1.系统如何处理异常？"></a>1.系统如何处理异常？</h5><p>定义了一个异常处理器，使用控制器增强注解(@ControllerAdvice),底层基于Aop的方式把系统抛出的异常进行拦截，指定某一个方法对某一个具体的异常类型进行捕获，捕获之后按照和前端约定的信息，给前端返回具体的结果类型</p>
+<p>我们自定义一个统一的异常处理器去捕获并处理异常。</p>
+<p>使用控制器增加注解@ControllerAdvice和异常处理注解@ExceptionHandler来实现。</p>
+<p>1.处理自定义异常</p>
+<p>程序在编写代码时根据校验结果主动抛出自定义异常类对象，抛出异常时指定详细的异常信息，异常处理器捕获异常记录异常日志并相应给用户。</p>
+<p>2.处理位置异常</p>
+<p>接口执行过程中的一些运行时异常也会由异常处理器统一捕获，记录异常日志，统一相应给用户500错误，在异常处理器中还可以针对某个异常类型进行单独处理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">package com.xuecheng.base.execption;</span><br><span class="line"></span><br><span class="line">import java.io.Serializable;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 错误响应参数包装</span><br><span class="line"> * 和前端约定返回的异常信息类</span><br><span class="line"> */</span><br><span class="line">public class RestErrorResponse implements Serializable &#123;</span><br><span class="line"></span><br><span class="line">    private String errMessage;</span><br><span class="line"></span><br><span class="line">    public RestErrorResponse(String errMessage)&#123;</span><br><span class="line">        this.errMessage= errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getErrMessage() &#123;</span><br><span class="line">        return errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setErrMessage(String errMessage) &#123;</span><br><span class="line">        this.errMessage = errMessage;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>2.如果想灵活查询每个层级可以使用mysql递归方法，使用 with recursive实现。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">with recursive t1 as (</span><br><span class="line">	select * from course_category p where id=#&#123;id&#125;</span><br><span class="line">	union all</span><br><span class="line">	select t.* from course_category t inner join t1 on ti.id = t.parentid</span><br><span class="line">)</span><br><span class="line">	select * from ti order by t1.id, t1.orderby</span><br></pre></td></tr></table></figure>
 
-<h5 id="3-Mybatis中的resultType和resultMap区别"><a href="#3-Mybatis中的resultType和resultMap区别" class="headerlink" title="3.Mybatis中的resultType和resultMap区别"></a>3.Mybatis中的resultType和resultMap区别</h5><p>resultType:指定映射类型，只要查询的字段名和类型的属性名匹配可以自动映射</p>
-<p>resultMap：自定义映射规则，当前查询的字段名和映射类型的属性不匹配时可以通过ResultMap自定义映射规则，也可以实现一对多，一对一映射。</p>
-<h5 id="4-和-的区别"><a href="#4-和-的区别" class="headerlink" title="4.#{}和${}的区别"></a>4.#{}和${}的区别</h5><p>#{}是标记一占位符，可以防止sql注入</p>
-<p>${}用于在动态sql中拼接字符串，可能导致sql注入</p>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">package com.xuecheng.base.execption;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @description 项目自定义异常类</span><br><span class="line"> * @author Mr.M</span><br><span class="line"> * @date 2022/9/6 11:29</span><br><span class="line"> * @version 1.0</span><br><span class="line"> */</span><br><span class="line">public class XueChengPlusException extends RuntimeException &#123;</span><br><span class="line"></span><br><span class="line">    private static final long serialVersionUID = 5565760508056698922L;</span><br><span class="line"></span><br><span class="line">    private String errMessage;</span><br><span class="line"></span><br><span class="line">    public XueChengPlusException() &#123;</span><br><span class="line">       super();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public XueChengPlusException(String errMessage) &#123;</span><br><span class="line">       super(errMessage);</span><br><span class="line">       this.errMessage = errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getErrMessage() &#123;</span><br><span class="line">       return errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void cast(CommonError commonError)&#123;</span><br><span class="line">        throw new XueChengPlusException(commonError.getErrMessage());</span><br><span class="line">    &#125;</span><br><span class="line">    public static void cast(String errMessage)&#123;</span><br><span class="line">        throw new XueChengPlusException(errMessage);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">package com.xuecheng.base.execption;</span><br><span class="line"></span><br><span class="line">import lombok.extern.slf4j.Slf4j;</span><br><span class="line">import org.springframework.http.HttpStatus;</span><br><span class="line">import org.springframework.validation.BindException;</span><br><span class="line">import org.springframework.validation.BindingResult;</span><br><span class="line">import org.springframework.validation.FieldError;</span><br><span class="line">import org.springframework.web.bind.MethodArgumentNotValidException;</span><br><span class="line">import org.springframework.web.bind.annotation.ControllerAdvice;</span><br><span class="line">import org.springframework.web.bind.annotation.ExceptionHandler;</span><br><span class="line">import org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line">import org.springframework.web.bind.annotation.ResponseStatus;</span><br><span class="line"></span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @description 全局异常处理器</span><br><span class="line"> * @author Mr.M</span><br><span class="line"> * @date 2022/9/6 11:29</span><br><span class="line"> * @version 1.0</span><br><span class="line"> */</span><br><span class="line">@Slf4j</span><br><span class="line">@ControllerAdvice</span><br><span class="line">public class GlobalExceptionHandler &#123;</span><br><span class="line"></span><br><span class="line">    @ResponseBody</span><br><span class="line">    @ExceptionHandler(XueChengPlusException.class)</span><br><span class="line">    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">    public RestErrorResponse doXueChengPlusException(XueChengPlusException e) &#123;</span><br><span class="line">       log.error(&quot;【系统异常】&#123;&#125;&quot;,e.getErrMessage(),e);</span><br><span class="line">       return new RestErrorResponse(e.getErrMessage());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    @ResponseBody</span><br><span class="line">    @ExceptionHandler(value = MethodArgumentNotValidException.class)</span><br><span class="line">    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">    public RestErrorResponse doValidException(MethodArgumentNotValidException argumentNotValidException) &#123;</span><br><span class="line"></span><br><span class="line">       BindingResult bindingResult = argumentNotValidException.getBindingResult();</span><br><span class="line">       StringBuffer errMsg = new StringBuffer();</span><br><span class="line"></span><br><span class="line">       List&lt;FieldError&gt; fieldErrors = bindingResult.getFieldErrors();</span><br><span class="line">       fieldErrors.forEach(error -&gt; &#123;</span><br><span class="line">          errMsg.append(error.getDefaultMessage()).append(&quot;,&quot;);</span><br><span class="line">       &#125;);</span><br><span class="line">       log.error(errMsg.toString());</span><br><span class="line">       return new RestErrorResponse(errMsg.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">//  @ExceptionHandler(value = BindException.class)</span><br><span class="line">//  public RestErrorResponse exceptionHandle(BindException exception) &#123;</span><br><span class="line">//</span><br><span class="line">//     BindingResult result = exception.getBindingResult();</span><br><span class="line">//     StringBuilder errorMsg = new StringBuilder();</span><br><span class="line">//</span><br><span class="line">//     List&lt;FieldError&gt; fieldErrors = result.getFieldErrors();</span><br><span class="line">//     fieldErrors.forEach(error -&gt; &#123;</span><br><span class="line">//        log.error(&quot;field: &quot; + error.getField() + &quot;, msg:&quot; + error.getDefaultMessage());</span><br><span class="line">//        errorMsg.append(error.getDefaultMessage()).append(&quot;!&quot;);</span><br><span class="line">//     &#125;);</span><br><span class="line">//     return new RestErrorResponse(errorMsg.toString());</span><br><span class="line">//  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @ResponseBody</span><br><span class="line">    @ExceptionHandler(Exception.class)</span><br><span class="line">    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)</span><br><span class="line">    public RestErrorResponse exception(Exception e) &#123;</span><br><span class="line"></span><br><span class="line">       log.error(&quot;【系统异常】&#123;&#125;&quot;,e.getMessage(),e);</span><br><span class="line">       e.printStackTrace();</span><br><span class="line">       return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">package com.xuecheng.base.execption;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @description 通用错误信息</span><br><span class="line"> * @author Mr.M</span><br><span class="line"> * @date 2022/9/6 11:29</span><br><span class="line"> * @version 1.0</span><br><span class="line"> */</span><br><span class="line">public enum CommonError &#123;</span><br><span class="line"></span><br><span class="line">    UNKOWN_ERROR(&quot;执行过程异常，请重试。&quot;),</span><br><span class="line">    PARAMS_ERROR(&quot;非法参数&quot;),</span><br><span class="line">    OBJECT_NULL(&quot;对象为空&quot;),</span><br><span class="line">    QUERY_NULL(&quot;查询结果为空&quot;),</span><br><span class="line">    REQUEST_NULL(&quot;请求参数为空&quot;);</span><br><span class="line"></span><br><span class="line">    private String errMessage;</span><br><span class="line"></span><br><span class="line">    public String getErrMessage() &#123;</span><br><span class="line">       return errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private CommonError( String errMessage) &#123;</span><br><span class="line">       this.errMessage = errMessage;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
                 
             </div>
@@ -512,7 +519,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2024/06/17/mysql%E7%9B%B8%E5%85%B3/">http://example.com/2024/06/17/mysql%E7%9B%B8%E5%85%B3/</a>
+                    <a href="http://example.com/2024/06/19/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">http://example.com/2024/06/19/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -550,8 +557,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
-                                    <span class="chip bg-color">数据库</span>
+                                <a href="/tags/java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+                                    <span class="chip bg-color">java异常处理</span>
                                 </a>
                             
                         </div>
@@ -721,9 +728,56 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/06/19/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="异常处理">
+                        
+                        <span class="card-title">异常处理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Lycoris
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+                        <span class="chip bg-color">java异常处理</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2024/06/18/%E5%AD%A6%E6%88%90%E5%9C%A8%E7%BA%BF%E4%BB%8B%E7%BB%8D/">
                     <div class="card-image">
@@ -741,9 +795,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2024-06-18
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-18
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -757,51 +811,6 @@
                     
                     <a href="/tags/%E9%BB%91%E9%A9%AC%E5%AD%A6%E4%B9%A0/">
                         <span class="chip bg-color">黑马学习</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2024/06/13/redis/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="redis学习笔记">
-                        
-                        <span class="card-title">redis学习笔记</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-13
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            Lycoris
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
                     </a>
                     
                 </div>
